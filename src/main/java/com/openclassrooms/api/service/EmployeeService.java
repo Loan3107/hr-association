@@ -28,7 +28,12 @@ public class EmployeeService {
 	}
 	
 	public void deleteById(final Long id) {
-		employeeRepository.deleteById(id);
+		try {
+			Employee employee = this.getById(id);
+			employeeRepository.deleteById(employee.getId());
+		} catch (ResourceNotFoundException e) {
+			throw new ResourceNotFoundException("No employee to delete");
+		}
 	}
 	
 	public Employee saveEmployee(Employee employee) {
