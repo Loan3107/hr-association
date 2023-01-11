@@ -36,8 +36,7 @@ public class EmployeeController {
 	 */
 	@GetMapping("/employees/{id}")
 	public Employee getById(@PathVariable("id") final Long id) {
-		Optional<Employee> employee = employeeService.getById(id);
-		return employee.isPresent() ? employee.get() : null;
+		return employeeService.getById(id);
 	}
 	
 	/**
