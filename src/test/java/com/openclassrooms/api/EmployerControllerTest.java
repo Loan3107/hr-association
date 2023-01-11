@@ -60,7 +60,8 @@ public class EmployerControllerTest {
 			.accept(MediaType.APPLICATION_JSON)
 		)
 		.andExpect(status().isCreated())
-		.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+		.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
+		.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(2));
 	}
 	
 	@Test
@@ -73,7 +74,9 @@ public class EmployerControllerTest {
 			.accept(MediaType.APPLICATION_JSON)
 		);
 		
-		mockMvc.perform(delete("/employees/{id}", 1)).andExpect(status().isNoContent());
+		mockMvc.perform(delete("/employees/{id}", 3)).andExpect(status().isNoContent());
+		
+		mockMvc.perform(delete("/employees/{id}", 4)).andExpect(status().isNotFound());
 	}
 	
 	private static String asJsonString(final Object obj) {
