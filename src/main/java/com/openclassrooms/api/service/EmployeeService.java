@@ -40,4 +40,20 @@ public class EmployeeService {
 		Employee savedEmployee = employeeRepository.save(employee);
 		return savedEmployee;
 	}
+	
+	public Employee updateEmployee(final Long id, Employee employee) {
+		try {
+			Employee currentEmployee = this.getById(id);
+			if (employee.getFirstName() != null) currentEmployee.setFirstName(employee.getFirstName());
+			if (employee.getLastName() != null) currentEmployee.setLastName(employee.getLastName());
+			if (employee.getMail() != null) currentEmployee.setMail(employee.getMail());
+			if (employee.getPassword() != null) currentEmployee.setPassword(employee.getPassword());
+			
+			this.saveEmployee(currentEmployee);
+			
+			return currentEmployee;
+		} catch (ResourceNotFoundException e) {
+			throw new ResourceNotFoundException("The employee does not exist");
+		}
+	}
 }
