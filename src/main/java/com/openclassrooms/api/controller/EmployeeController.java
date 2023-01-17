@@ -59,7 +59,7 @@ public class EmployeeController {
 	 * @param employee - Employee with modified informations
 	 * @return - The updated Employee
 	 */
-	@PutMapping("/employee/{id}")
+	@PutMapping("/employees/{id}")
 	@ResponseStatus(value = HttpStatus.OK, code = HttpStatus.OK)
 	public Employee put(@PathVariable("id") final Long id, @RequestBody Employee employee) {
 		return employeeService.updateEmployee(id, employee);
