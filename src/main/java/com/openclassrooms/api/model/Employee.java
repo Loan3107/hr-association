@@ -80,4 +80,13 @@ public class Employee {
 		this.mail = mail;
 		this.password = password;
 	}
+	
+	public Employee(final Long id, String firstName, String lastName, String mail, String password) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.password = password;
+	}
 }
