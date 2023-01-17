@@ -3,9 +3,13 @@ package com.openclassrooms.api;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,16 +22,19 @@ import com.openclassrooms.api.model.Employee;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(OrderAnnotation.class)
 public class EmployerControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Test
+	@Order(1)
 	public void testGetAll() throws Exception {
 		mockMvc.perform(get("/employees")).andExpect(status().isOk());
 	}
 	
 	@Test
+	@Order(2)
 	public void testGetById() throws Exception {
 		// We're ensuring we have an employee
 		mockMvc.perform(
@@ -52,6 +59,7 @@ public class EmployerControllerTest {
 	}
 	
 	@Test
+	@Order(3)
 	public void testCreate() throws Exception {
 		mockMvc.perform(
 			post("/employees")
@@ -65,6 +73,30 @@ public class EmployerControllerTest {
 	}
 	
 	@Test
+	@Order(4)
+	public void testPut() throws Exception {
+		mockMvc.perform(
+			put("/employees/{id}", 2)
+			.content(asJsonString(new Employee(2L, "Tristan", "PIROTAIS", "tristan.pirotais@cgi.com", "toto")))
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
+		)
+		.andExpect(status().isOk())
+		.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(2))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Tristan"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.mail").value("tristan.pirotais@cgi.com"));
+		
+		mockMvc.perform(
+			put("/employees/{id}", 3)
+			.content(asJsonString(new Employee(3L, "Tristan", "PIROTAIS", "tristan.pirotais@cgi.com", "toto")))
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
+		)
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	@Order(5)
 	public void testDelete() throws Exception {
 		// We're ensuring we have an employee
 		mockMvc.perform(
